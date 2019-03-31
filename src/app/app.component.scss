@@ -1,0 +1,16 @@
+@import "../../node_modules/jquery-ui/themes/base/all.css";
+
+div.post-elements {
+	//&.ui-selecting { background: #FECA40; }
+	//&.ui-selected { background: #F39814; color: white; }
+}
+
+form {
+	table {
+		margin: auto;
+	}
+}
+
+header, main, footer {
+	text-align: center;
+}

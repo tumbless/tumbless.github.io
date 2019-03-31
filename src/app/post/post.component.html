@@ -1,0 +1,65 @@
+<div class="post-element"
+	 [attr.data-post-id]="post.id"
+	 [attr.data-post-reblog-key]="post.reblog_key"
+	 [ngClass]="{
+	 'post-element-selected': post.selected
+	 }"
+>
+	<div *ngIf="post.content.length > 0">
+		<div *ngFor="let content of post.content" class="post-content">
+			<div *ngIf="content.type == 'text'"
+				 class="post-text">
+				<p [ngClass]="{
+						'post-text-quote': content.subtype === 'quote',
+						'post-text-chat': content.subtype === 'chat'
+						}">{{content.text}}</p>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="post.trail.length > 0">
+		<div *ngFor="let trail of post.trail" class="post-trail">
+			<!--<div *ngIf="trail.content.length > 1">{{trail.content.length}}</div>-->
+			<div *ngFor="let content of trail.content">
+				<div *ngIf="content.type == 'image'" class="post-photo">
+					<div
+						[ngStyle]="{'background-image': 'url(' + content.slim_media.media_url_template.replace('{id}', '250') + ')'}"
+						class="post-image"></div>
+				</div>
+				<div *ngIf="content.type == 'audio'"
+					 class="post-audio">
+					<table>
+						<tbody>
+						<tr>
+							<td>
+								<div [ngStyle]="{'background-image': 'url(' + content.poster[0].url + ')'}"
+									 class="post-image"></div>
+							</td>
+							<td>
+								<p>{{content.title}}</p>
+								<p>{{content.album}}</p>
+								<p>{{content.artist}}</p>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div *ngIf="content.type == 'video'"
+					 class="post-video">
+					<div [ngStyle]="{'background-image': 'url(' + content.poster[0].url + ')'}"
+						 class="post-image"></div>
+				</div>
+				<div *ngIf="content.type == 'text'"
+					 class="post-text">
+					<p [ngClass]="{
+							'post-text-quote': content.subtype === 'quote',
+							'post-text-chat': content.subtype === 'chat'
+							}">{{content.text}}</p>
+				</div>
+				<div *ngIf="content.type == 'link'"
+					 class="post-link">
+					<p>{{content.title}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

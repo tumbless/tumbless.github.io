@@ -1,0 +1,101 @@
+@import "../../styles";
+
+div.post-element {
+	background: $grey;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+	display: inline-block;
+	height: 200px;
+	margin: 5px;
+	overflow: hidden;
+	position: relative;
+	text-align: left;
+	vertical-align: middle;
+	width: 200px;
+
+	div.post-image {
+		width: 200px;
+		height: 200px;
+		background-size: cover;
+	}
+
+	div.post-audio {
+		background: $purple;
+		color: white;
+		padding: 10px;
+
+		table {
+			border-spacing: 0;
+			font-size: 0.75em;
+			table-layout: fixed;
+
+			td {
+				padding: 0;
+				vertical-align: top;
+
+				div.post-image {
+					width: 50px;
+					height: 50px;
+					background-size: cover;
+					-webkit-border-radius: 5px;
+					-moz-border-radius: 5px;
+					border-radius: 5px;
+				}
+
+				p {
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+
+	div.post-link {
+		background: $green;
+		color: white;
+		padding: 10px;
+	}
+
+	div.post-text {
+		p {
+			padding: 5px 10px;
+		}
+
+		p.post-text-heading1, p.post-text-quote {
+			background: $orange;
+			font-size: 1.25em;
+		}
+
+		p.post-text-chat {
+			font-style: italic;
+			background: $blue;
+			color: white;
+		}
+	}
+
+	div.post-video {
+		background: pink;
+		padding: 10px;
+
+		div.post-image {
+			height: 180px;
+			background-size: cover;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			border-radius: 5px;
+			//margin: 10px;
+			width: 180px;
+		}
+	}
+
+	&:hover:before, &.post-element-selected:before {
+		content: "";
+		display: block;
+		width: 200px;
+		height: 200px;
+		background: $purple-dark;
+		position: absolute;
+		opacity: 0.3;
+	}
+}
