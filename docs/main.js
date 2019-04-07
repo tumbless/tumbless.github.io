@@ -309,7 +309,6 @@ var AppComponent = /** @class */ (function () {
                 blog: _this.consumers[0].user.blogs[0].name
             });
         }, console.error);
-        // this.load(undefined);
         jquery__WEBPACK_IMPORTED_MODULE_7__('div.post-elements').selectable({
             filter: 'div.post-element',
             selected: function (event, ui) {

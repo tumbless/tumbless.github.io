@@ -99,8 +99,6 @@ export class AppComponent implements OnInit {
 			});
 		}, console.error);
 
-		// this.load(undefined);
-
 		$('div.post-elements').selectable({
 			filter: 'div.post-element',
 			selected: (event: Event, ui: { selected?: Element }) => {
