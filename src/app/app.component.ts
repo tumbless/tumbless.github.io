@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
 	});
 
 	postsForm: FormGroup = new FormGroup({
-		blog: new FormControl('infered'),
+		blog: new FormControl(''),
 		tag: new FormControl(''),
 		type: new FormControl('/')
 	});
@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
 			});
 		}, console.error);
 
-		this.load(undefined);
+		// this.load(undefined);
 
 		$('div.post-elements').selectable({
 			filter: 'div.post-element',
