@@ -1,23 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, NgZone, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {FormControl} from '@angular/forms';
-import {Post, Posts} from './posts';
-import * as _ from 'lodash';
-
-import * as $ from 'jquery';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Post, Posts} from './_type/posts';
 import 'jquery-ui/ui/widgets/selectable';
+import {QueueService} from './_service/queue.service';
+import {Consumer} from './consumer';
+import {QueueSystemService} from './_service/queue-system.service';
+import * as $ from 'jquery';
+import {forkJoin} from 'rxjs';
 
 interface Type {
 	title: string;
 	value: string;
 }
 
+interface EventTargetWithValue extends EventTarget {
+	value: number;
+}
+
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
+	// changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
+	consumers: Consumer[] = [];
 	quotes: string[] = [
 		'"Three may keep a secret, if two of them are dead."',
 		'"If you want to keep a secret, you must also hide it from yourself."',
@@ -56,56 +64,94 @@ export class AppComponent implements OnInit {
 		title: 'Chat',
 		value: '/chat'
 	}];
-	type: FormControl = new FormControl('/');
-	blog: FormControl = new FormControl('infered');
-	posts: Post[] = [];
 
-	constructor(private http: HttpClient) {
+	queueForm: FormGroup = new FormGroup({
+		blog: new FormControl()
+	});
+
+	postsForm: FormGroup = new FormGroup({
+		blog: new FormControl('infered'),
+		tag: new FormControl(''),
+		type: new FormControl('/')
+	});
+
+	networking: boolean = false;
+
+	constructor(
+		private zone: NgZone,
+		private changeDetectorRef: ChangeDetectorRef,
+		private httpClient: HttpClient,
+		private queueService: QueueService,
+		private queueSystemService: QueueSystemService,
+	) {
+		this.consumers.push(this.queueSystemService);
 	}
 
-	const
-	trackByIdentity = (index: number, item: Post) => item.id;
+	trackByIdentity(index: number, item: Post) {
+		return '' + item.id + item.selected;
+	}
 
 	ngOnInit(): void {
+		forkJoin(this.consumers.map(c => c.init())).subscribe(() => {
+			this.queueService.setConsumer(this.consumers[0]);
+			this.queueForm.patchValue({
+				blog: this.consumers[0].user.blogs[0].name
+			});
+		}, console.error);
+
 		this.load(undefined);
-		$('.post-elements').selectable({
+
+		$('div.post-elements').selectable({
 			filter: 'div.post-element',
-			selected: (event, ui) => {
-				const {postId} = $(ui.selected).data();
-				const p: Post = _.find(this.posts, (po: Post) => {
-					return po.id === postId;
-				});
-				console.log(p);
-				if (p.selected === undefined) {
-					p.selected = false;
-				}
-				console.log(p);
-				p.selected = !p.selected;
-				console.log(p);
-			},
-			stop: (event, ui) => {
-				console.log('hi')
-				this.posts = this.posts.slice();
+			selected: (event: Event, ui: { selected?: Element }) => {
+				this.zone.run(() => this.queueService.selectPost($(ui.selected).data('postId')));
 			}
 		});
 	}
 
+	@HostListener('window:scroll', [])
+	onScroll(): void {
+		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+			if (!this.networking && this.queueService.next) {
+				this.load(this.queueService.next.href);
+			}
+		}
+	}
+
 	load(path: string) {
+		if (this.networking) {
+			return;
+		}
+		this.networking = true;
 		if (path === undefined) {
-			if (!/^[\dA-Za-z-]+$/.test(this.blog.value)) {
-				console.error('Invalid blog name.');
+			if (!/^[\dA-Za-z-]+$/.test(this.postsForm.value.blog)) {
 				return;
 			}
-			this.posts = [];
-			path = '/v2/blog/' + this.blog.value + '/posts' + this.type.value + '?limit=30&page_number=1';
+			this.queueService.clearPosts();
+			path = '/v2/blog/' + this.postsForm.value.blog + '/posts' + this.postsForm.value.type + '?limit=50&page_number=1';
+			if (this.postsForm.value.tag !== '') {
+				path = path + '&tag=' + this.postsForm.value.tag;
+			}
 		}
-		this.http.get('https://api.tumblr.com' + path, {
+		this.httpClient.get('https://api.tumblr.com' + path, {
 			headers: new HttpHeaders({
 				Authorization: 'Bearer aIcXSOoTtqrzR8L8YEIOmBeW94c3FmbSNSWAUbxsny9KKx5VFh'
 			})
 		})
 			.subscribe((posts: Posts) => {
-				this.posts = _.concat(this.posts, posts.response.posts);
+				for (const post of posts.response.posts) {
+					post.from = post.blog_name;
+					post.post_id = post.id.toString();
+					this.queueService.addPost(post);
+				}
+				if (posts.response._links !== undefined) {
+					this.queueService.next = posts.response._links.next;
+				}
+				this.networking = false;
 			}, console.error);
+	}
+
+	selectConsumer(target: EventTargetWithValue) {
+		this.queueService.setConsumer(this.consumers[target.value]);
 	}
 }

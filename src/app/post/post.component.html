@@ -5,6 +5,12 @@
 	 'post-element-selected': post.selected
 	 }"
 >
+	<div class="post-element-cover">
+		<p>Notes: {{post.note_count}}</p>
+		<p>
+			<span *ngFor="let tag of post.tags">#{{tag}} </span>
+		</p>
+	</div>
 	<div *ngIf="post.content.length > 0">
 		<div *ngFor="let content of post.content" class="post-content">
 			<div *ngIf="content.type == 'text'"
@@ -30,7 +36,7 @@
 					<table>
 						<tbody>
 						<tr>
-							<td>
+							<td *ngIf="content.poster">
 								<div [ngStyle]="{'background-image': 'url(' + content.poster[0].url + ')'}"
 									 class="post-image"></div>
 							</td>
@@ -45,7 +51,7 @@
 				</div>
 				<div *ngIf="content.type == 'video'"
 					 class="post-video">
-					<div [ngStyle]="{'background-image': 'url(' + content.poster[0].url + ')'}"
+					<div *ngIf="content.poster" [ngStyle]="{'background-image': 'url(' + content.poster[0].url + ')'}"
 						 class="post-image"></div>
 				</div>
 				<div *ngIf="content.type == 'text'"

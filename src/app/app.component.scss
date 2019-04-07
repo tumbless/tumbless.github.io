@@ -1,9 +1,5 @@
+@import "../styles";
 @import "../../node_modules/jquery-ui/themes/base/all.css";
-
-div.post-elements {
-	//&.ui-selecting { background: #FECA40; }
-	//&.ui-selected { background: #F39814; color: white; }
-}
 
 form {
 	table {
@@ -13,4 +9,41 @@ form {
 
 header, main, footer {
 	text-align: center;
+}
+
+header {
+
+	padding: 70px 10px 10px 10px;
+	div.bar {
+		background: $yellow;
+		height: 50px;
+		left: 0;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 1;
+		form {
+			table {
+				border-spacing: 10px;
+				height: 50px;
+				td {
+					padding: 0;
+				}
+			}
+		}
+	}
+	form {
+		div.form-element {
+			button, input, select {
+				width: 100%;
+			}
+			//input.form-element-input-tag {
+			//	width: 100px;
+			//}
+		}
+	}
+}
+
+main {
+	padding: 10px 10px 10px 10px;
 }

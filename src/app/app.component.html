@@ -1,28 +1,73 @@
 <header>
+	<div class="bar">
+		<form [formGroup]="queueForm">
+			<table>
+				<tbody>
+				<tr>
+					<td *ngIf="consumers.length > 0">
+						<select (change)="selectConsumer($event.target)">
+							<option *ngFor="let consumer of consumers; let index = index" [value]="index">{{consumer.name}}</option>
+						</select>
+					</td>
+					<td *ngIf="queueService.consumer">
+						<select formControlName="blog">
+							<option *ngFor="let blog of queueService.consumer.user.blogs" [value]="blog.name">{{blog.name}}</option>
+						</select>
+					</td>
+					<ng-template ngIf="(queueService.posts$ | async).length > 0">
+						<td>
+							<button (click)="queueService.queue(queueForm.value.blog)" [ngClass]="{
+						'ready': queueService.selectedPostsCount() > 0
+						}">Queue {{queueService.selectedPostsCount()}}</button>
+						</td>
+						<td>
+							<button (click)="queueService.selectPostByNoteCount(0)">0+</button>
+						</td><td>
+						<button (click)="queueService.selectPostByNoteCount(1000)">1K+</button>
+					</td>
+						<td>
+							<button (click)="queueService.selectPostByNoteCount(10000)">10K+</button>
+						</td>
+						<td>
+							<button (click)="queueService.selectPostByNoteCount(100000)">100K+</button>
+						</td>
+					</ng-template>
+				</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
 	<h1>{{title}}</h1>
 	<h2>{{quote}}</h2>
-</header>
-<main>
 	<div>
-		<form>
+		<form [formGroup]="postsForm">
 			<table>
 				<tbody>
 				<tr>
 					<td>
 						<div class="form-element">
-							<select class="form-control" id="country" [formControl]="type">
-								<option *ngFor="let type of types" [ngValue]="type.value">{{type.title}}</option>
+							<select class="form-control" id="country" formControlName="type">
+								<option *ngFor="let type of types" [value]="type.value">{{type.title}}</option>
 							</select>
 						</div>
 					</td>
 					<td>
 						<div class="form-element">
-							<input type="text" placeholder="Blog Name" [formControl]="blog">
+							<input type="text" placeholder="Blog Name" formControlName="blog">
 						</div>
 					</td>
-					<td>
+				</tr>
+				<tr>
+					<td colspan="2">
 						<div class="form-element">
-							<button (click)="load()">Load</button>
+							<input type="text" placeholder="Tag" formControlName="tag" class="form-element-input-tag">
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="form-element">
+							<button (click)="load(undefined)">Load</button>
 						</div>
 					</td>
 				</tr>
@@ -30,8 +75,10 @@
 			</table>
 		</form>
 	</div>
+</header>
+<main>
 	<div class="post-elements">
-		<app-post *ngFor="let post of posts; trackBy:trackByIdentity" [post]="post">
+		<app-post *ngFor="let post of queueService.posts$ | async; trackBy: trackByIdentity" [post]="post">
 		</app-post>
 	</div>
 </main>

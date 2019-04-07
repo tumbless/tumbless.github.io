@@ -29,15 +29,29 @@ interface Trail {
 
 export interface Post {
 	id: number;
+	blog_name: string;
 	content: Content[];
+	from: string;
+	note_count: number;
+	post_id: string;
 	reblog_key: string;
+	tags: string[];
 	trail: Trail[];
 	selected: boolean;
+}
+
+export interface Link {
+	href: string;
+}
+
+interface Links {
+	next: Link;
 }
 
 interface Response {
 	blog: Blog;
 	posts: Post[];
+	_links: Links;
 }
 
 export interface Posts {

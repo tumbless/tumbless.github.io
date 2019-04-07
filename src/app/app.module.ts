@@ -17,7 +17,8 @@ import {PostComponent} from './post/post.component';
 		FormsModule,
 		ReactiveFormsModule
 	],
-	providers: [],
+	providers: [
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

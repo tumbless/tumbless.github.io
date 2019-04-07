@@ -89,13 +89,19 @@ div.post-element {
 		}
 	}
 
-	&:hover:before, &.post-element-selected:before {
-		content: "";
+	div.post-element-cover {
+		display: none;
+	}
+
+	&:hover .post-element-cover, &.post-element-selected .post-element-cover {
+		background: rgba($yellow, 0.8);
+		color: $black;
 		display: block;
-		width: 200px;
-		height: 200px;
-		background: $purple-dark;
+		font-size: 18px;
+		font-weight: bold;
+		height: 180px;
+		padding: 10px;
 		position: absolute;
-		opacity: 0.3;
+		width: 180px;
 	}
 }
