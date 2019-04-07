@@ -291,7 +291,7 @@ var AppComponent = /** @class */ (function () {
             blog: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]()
         });
         this.postsForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
-            blog: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('infered'),
+            blog: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](''),
             tag: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](''),
             type: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('/')
         });
@@ -309,7 +309,7 @@ var AppComponent = /** @class */ (function () {
                 blog: _this.consumers[0].user.blogs[0].name
             });
         }, console.error);
-        this.load(undefined);
+        // this.load(undefined);
         jquery__WEBPACK_IMPORTED_MODULE_7__('div.post-elements').selectable({
             filter: 'div.post-element',
             selected: function (event, ui) {
