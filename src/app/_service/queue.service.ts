@@ -96,13 +96,12 @@ export class QueueService {
 			blog,
 			posts: this.selectedPosts()
 		})
-		this.posts = this.posts.map(post => {
-			post.selected = false;
-			return post;
-		});
 		this.consumer.queue(blog, this.selectedPosts())
 			.subscribe(() => {
-
+				this.posts = this.posts.map(post => {
+					post.selected = false;
+					return post;
+				});
 			}, console.error, console.log);
 	}
 }

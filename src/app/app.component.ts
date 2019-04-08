@@ -81,7 +81,7 @@ export class AppComponent implements OnInit {
 		private zone: NgZone,
 		private changeDetectorRef: ChangeDetectorRef,
 		private httpClient: HttpClient,
-		private queueService: QueueService,
+		public queueService: QueueService,
 		private queueSystemService: QueueSystemService,
 	) {
 		this.consumers.push(this.queueSystemService);
