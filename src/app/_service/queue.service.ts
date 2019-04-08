@@ -100,9 +100,9 @@ export class QueueService {
 			post.selected = false;
 			return post;
 		});
-		// this.consumer.queue(blog, this.selectedPosts())
-		// 	.subscribe(() => {
-		//
-		// 	}, console.error, console.log);
+		this.consumer.queue(blog, this.selectedPosts())
+			.subscribe(() => {
+
+			}, console.error, console.log);
 	}
 }
