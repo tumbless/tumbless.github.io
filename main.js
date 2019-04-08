@@ -172,10 +172,9 @@ var QueueService = /** @class */ (function () {
             post.selected = false;
             return post;
         });
-        // this.consumer.queue(blog, this.selectedPosts())
-        // 	.subscribe(() => {
-        //
-        // 	}, console.error, console.log);
+        this.consumer.queue(blog, this.selectedPosts())
+            .subscribe(function () {
+        }, console.error, console.log);
     };
     QueueService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
