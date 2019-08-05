@@ -12,11 +12,16 @@ interface SlimMedia {
 	media_url_template: string;
 }
 
+interface Media {
+	url: string;
+}
+
 interface Content {
 	type: string;
 	subtype: string;
 	album: string;
 	artist: string;
+	media: Media[];
 	poster: Poster[];
 	slim_media: SlimMedia;
 	text: string;

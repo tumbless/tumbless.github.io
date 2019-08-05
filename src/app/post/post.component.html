@@ -27,9 +27,16 @@
 			<!--<div *ngIf="trail.content.length > 1">{{trail.content.length}}</div>-->
 			<div *ngFor="let content of trail.content">
 				<div *ngIf="content.type == 'image'" class="post-photo">
-					<div
-						[ngStyle]="{'background-image': 'url(' + content.slim_media.media_url_template.replace('{id}', '250') + ')'}"
-						class="post-image"></div>
+					<div *ngIf="content.media === undefined; else elseBlock">
+						<div
+							[ngStyle]="{'background-image': 'url(' + content.slim_media.media_url_template.replace('{id}', '250') + ')'}"
+							class="post-image"></div>
+					</div>
+					<ng-template #elseBlock>
+						<div
+							[ngStyle]="{'background-image': 'url(' + content.media[0].url + ')'}"
+							class="post-image"></div>
+					</ng-template>
 				</div>
 				<div *ngIf="content.type == 'audio'"
 					 class="post-audio">

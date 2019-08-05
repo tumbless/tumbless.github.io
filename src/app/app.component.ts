@@ -21,8 +21,7 @@ interface EventTargetWithValue extends EventTarget {
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.scss'],
-	// changeDetection: ChangeDetectionStrategy.OnPush
+	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 	consumers: Consumer[] = [];
@@ -113,6 +112,13 @@ export class AppComponent implements OnInit {
 			if (!this.networking && this.queueService.next) {
 				this.load(this.queueService.next.href);
 			}
+		}
+	}
+
+	@HostListener('window:beforeunload', ['$event'])
+	onBeforeUnload(event): void {
+		if (this.queueService.selectedPostsCount() > 0) {
+			event.returnValue = true;
 		}
 	}
 
