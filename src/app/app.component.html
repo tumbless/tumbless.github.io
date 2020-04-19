@@ -5,13 +5,13 @@
 				<tbody>
 				<tr>
 					<td *ngIf="consumers.length > 0">
-						<select (change)="selectConsumer($event.target)">
+						<select (change)="selectConsumer($event)">
 							<option *ngFor="let consumer of consumers; let index = index" [value]="index">{{consumer.name}}</option>
 						</select>
 					</td>
 					<td *ngIf="queueService.consumer">
 						<select formControlName="blog">
-							<option *ngFor="let blog of queueService.consumer.user.blogs" [value]="blog.name">{{blog.name}}</option>
+							<option *ngFor="let blog of queueService.consumer.user.blogs" [value]="blog.blogId">{{blog.tumblr.name}}</option>
 						</select>
 					</td>
 					<ng-template ngIf="(queueService.posts$ | async).length > 0">

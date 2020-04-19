@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Link, Post} from '../_type/posts';
+import {camelCase} from 'lodash/string'
 import {BehaviorSubject} from 'rxjs';
-import {User} from '../_type/user';
-import {Queue} from '../_type/queue';
+import {Link, Post} from '../_type/posts';
 import {Consumer} from '../consumer';
 
 @Injectable({
@@ -10,7 +9,7 @@ import {Consumer} from '../consumer';
 })
 export class QueueService {
 
-	private readonly posts$$ = new BehaviorSubject<Post[]>([]);
+	private readonly posts$$: BehaviorSubject<Post[]> = new BehaviorSubject<Post[]>([]);
 	readonly posts$ = this.posts$$.asObservable();
 
 	private readonly consumer$$ = new BehaviorSubject<Consumer>(null);
@@ -45,7 +44,8 @@ export class QueueService {
 	}
 
 	selectPost(id: number) {
-		const post = this.posts.find(p => p.id === id);
+		const post = this.posts.find(p => p.id == id);
+		console.log(post);
 		if (post) {
 			const index = this.posts.indexOf(post);
 			const selected = !post.selected;
@@ -75,8 +75,16 @@ export class QueueService {
 		}, 0);
 	}
 
-	selectedPosts(): Post[] {
-		return this.posts.filter(post => post.selected === true);
+	selectedPosts(): object[] {
+		return this.posts.filter(post => post.selected === true).map(
+			(post: Post) => {
+				return {
+					fromId: post['blog']['uuid'],
+					postId: post.id,
+					reblogKey: post.reblog_key
+				}
+			}
+		);
 	}
 
 	get consumer(): Consumer {
@@ -92,16 +100,20 @@ export class QueueService {
 	}
 
 	queue(blog: string) {
-		console.log({
-			blog,
-			posts: this.selectedPosts()
-		})
 		this.consumer.queue(blog, this.selectedPosts())
 			.subscribe(() => {
 				this.posts = this.posts.map(post => {
 					post.selected = false;
 					return post;
 				});
-			}, console.error, console.log);
+			}, ((error: Error) => {
+				window.alert(error.message);
+			}), console.log);
 	}
 }
+
+const camelCaseKeys = (obj) =>
+	Object.keys(obj).reduce((ccObj, field) => ({
+		...ccObj,
+		[camelCase(field)]: obj[field]
+	}), {});

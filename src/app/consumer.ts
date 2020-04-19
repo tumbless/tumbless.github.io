@@ -15,5 +15,5 @@ export interface Consumer {
 
 	init(): Observable<User>;
 
-	queue(to: string, posts: Post[]): Observable<object>;
+	queue(to: string, posts: object[]): Observable<object>;
 }

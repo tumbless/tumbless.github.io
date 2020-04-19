@@ -1,5 +1,8 @@
 export interface Blog {
-	name: string;
+	blogId: string;
+	tumblr: {
+		name: string;
+	}
 }
 
 export interface User {

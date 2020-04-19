@@ -7,8 +7,8 @@ import {QueueService} from './_service/queue.service';
 import {Consumer} from './consumer';
 import {QueueSystemService} from './_service/queue-system.service';
 import * as $ from 'jquery';
+import 'jquery-ui';
 import {forkJoin} from 'rxjs';
-
 interface Type {
 	title: string;
 	value: string;
@@ -94,13 +94,14 @@ export class AppComponent implements OnInit {
 		forkJoin(this.consumers.map(c => c.init())).subscribe(() => {
 			this.queueService.setConsumer(this.consumers[0]);
 			this.queueForm.patchValue({
-				blog: this.consumers[0].user.blogs[0].name
+				blog: this.consumers[0].user.blogs[0].tumblr.name
 			});
 		}, console.error);
 
-		$('div.post-elements').selectable({
+		(<any>$('div.post-elements')).selectable({
 			filter: 'div.post-element',
 			selected: (event: Event, ui: { selected?: Element }) => {
+				console.log($(ui.selected).data('postId'));
 				this.zone.run(() => this.queueService.selectPost($(ui.selected).data('postId')));
 			}
 		});
@@ -128,7 +129,7 @@ export class AppComponent implements OnInit {
 		}
 		this.networking = true;
 		if (path === undefined) {
-			if (!/^[\dA-Za-z-]+$/.test(this.postsForm.value.blog)) {
+			if (!/^[\dA-Za-z-:]+$/.test(this.postsForm.value.blog)) {
 				return;
 			}
 			this.queueService.clearPosts();
@@ -155,7 +156,7 @@ export class AppComponent implements OnInit {
 			}, console.error);
 	}
 
-	selectConsumer(target: EventTargetWithValue) {
-		this.queueService.setConsumer(this.consumers[target.value]);
+	selectConsumer(event: Event) {
+		this.queueService.setConsumer(this.consumers[(<HTMLInputElement>event.target).value]);
 	}
 }
