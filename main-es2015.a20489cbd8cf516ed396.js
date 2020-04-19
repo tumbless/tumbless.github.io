@@ -44,9 +44,9 @@ class QueueSystemService {
     constructor(httpClient) {
         this.httpClient = httpClient;
         this.id = 1;
-        this.getUrl = 'https://imac.local:5100/api/blog/';
+        this.getUrl = 'https://followercounter.co/api/blog/';
         this.name = 'Queue System';
-        this.postUrl = 'https://imac.local:5100/api/blog/';
+        this.postUrl = 'https://followercounter.co/api/blog/';
     }
     init() {
         return this.doQuery(this.getUrl, `query {
@@ -730,4 +730,4 @@ module.exports = __webpack_require__(/*! /Users/zachbecker/PycharmProjects/tumbl
 /***/ })
 
 },[[0,"runtime","vendor"]]]);
-//# sourceMappingURL=main-es2015.a44c3950b55cd6343200.js.map
+//# sourceMappingURL=main-es2015.a20489cbd8cf516ed396.js.map
