@@ -95,9 +95,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
         this.httpClient = httpClient;
         this.id = 1;
-        this.getUrl = 'https://imac.local:5100/api/blog/';
+        this.getUrl = 'https://followercounter.co/api/blog/';
         this.name = 'Queue System';
-        this.postUrl = 'https://imac.local:5100/api/blog/';
+        this.postUrl = 'https://followercounter.co/api/blog/';
       }
 
       _createClass(QueueSystemService, [{
@@ -1875,4 +1875,4 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /***/
   }
 }, [[0, "runtime", "vendor"]]]);
-//# sourceMappingURL=main-es5.a44c3950b55cd6343200.js.map
+//# sourceMappingURL=main-es5.a20489cbd8cf516ed396.js.map
